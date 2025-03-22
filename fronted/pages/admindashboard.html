@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Upravljanje peticijama</h2>
+        <button class="btn btn-success mb-3" onclick="openPetitionModal()">Dodaj novu peticiju</button>
+        <div id="petitions-list" class="row"></div>
+
+        <h2 class="mt-5">Prosljeđivanje donacija</h2>
+        <button class="btn btn-primary" onclick="openDonationModal()">Proslijedi donaciju</button>
+    </div>
+
+    <!-- Peticija Modal -->
+    <div class="modal fade" id="petitionModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Uredi/Dodaj Peticiju</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="petition-id">
+                    <input type="text" id="petition-title" class="form-control mb-2" placeholder="Naslov">
+                    <textarea id="petition-description" class="form-control mb-2" placeholder="Opis"></textarea>
+                    <input type="text" id="petition-image" class="form-control mb-2" placeholder="URL slike">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="savePetition()">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Donacija Modal -->
+    <div class="modal fade" id="donationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Proslijedi Donaciju</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="donation-name" class="form-control mb-2" placeholder="Ime i prezime">
+                    <input type="text" id="donation-address" class="form-control mb-2" placeholder="Adresa">
+                    <input type="text" id="donation-account" class="form-control mb-2" placeholder="Broj računa">
+                    <input type="text" id="donation-amount" class="form-control mb-2" placeholder="Iznos">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="saveDonation()">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Uspješno proslijeđena donacija Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Obavijest</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Donacija je uspješno proslijeđena!</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-bs-dismiss="modal">U redu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <script>
+        let petitions = [
+            { id: 1, title: "Zaštita prava žena na radnom mjestu", description: "Peticija za jednaka prava.", image: "https://img.24sata.hr/PMPvsEIIKLyZ8rmXCD0JflVC4Go=/890x0/smart/media/images/2024-10/pxl-080324-111323456.jpg" },
+            { id: 2, title: "Zakon protiv nasilja u porodici", description: "Podrži izmjene zakona.", image: "https://fld.ba/assets/photos/news/big/1678187936-nasilje-nije-privatna-stvar-vrijeme-je-za-usvajanje-zakona-o-zastiti-od-nasilja-u-porodici-u-fbih.jpg" },
+            { id: 3, title: "Sigurni prostori za žene", description: "Sigurni centri za žene.", image: "https://gracija.ba/wp-content/uploads/2022/09/Istrazivacke-setnje-za-procjenu-sigurnosti-javnih-prostora-Banja-Luka-3.jpg" }
+        ];
+
+        function renderPetitions() {
+            const list = document.getElementById('petitions-list');
+            list.innerHTML = '';
+            petitions.forEach(p => {
+                list.innerHTML += `
+                    <div class="col-md-4">
+                        <div class="card mb-3">
+                            <img src="${p.image}" class="card-img-top" alt="${p.title}">
+                            <div class="card-body">
+                                <h5>${p.title}</h5>
+                                <p>${p.description}</p>
+                                <button class="btn btn-warning" onclick="editPetition(${p.id})">Uredi</button>
+                                <button class="btn btn-danger" onclick="deletePetition(${p.id})">Obriši</button>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function openPetitionModal(id = null) {
+            if (id) {
+                const petition = petitions.find(p => p.id === id);
+                document.getElementById('petition-id').value = petition.id;
+                document.getElementById('petition-title').value = petition.title;
+                document.getElementById('petition-description').value = petition.description;
+                document.getElementById('petition-image').value = petition.image;
+            } else {
+                document.getElementById('petition-id').value = '';
+                document.getElementById('petition-title').value = '';
+                document.getElementById('petition-description').value = '';
+                document.getElementById('petition-image').value = '';
+            }
+            new bootstrap.Modal(document.getElementById('petitionModal')).show();
+        }
+
+        function savePetition() {
+            const id = document.getElementById('petition-id').value;
+            const title = document.getElementById('petition-title').value;
+            const description = document.getElementById('petition-description').value;
+            const image = document.getElementById('petition-image').value;
+            if (id) {
+                const petition = petitions.find(p => p.id == id);
+                petition.title = title;
+                petition.description = description;
+                petition.image = image;
+            } else {
+                petitions.push({ id: Date.now(), title, description, image });
+            }
+            renderPetitions();
+            bootstrap.Modal.getInstance(document.getElementById('petitionModal')).hide();
+        }
+
+        function deletePetition(id) {
+            petitions = petitions.filter(p => p.id !== id);
+            renderPetitions();
+        }
+
+        function openDonationModal() {
+            new bootstrap.Modal(document.getElementById('donationModal')).show();
+        }
+
+        function saveDonation() {
+            alert("Donacija proslijeđena!");
+            bootstrap.Modal.getInstance(document.getElementById('donationModal')).hide();
+        }
+
+        renderPetitions();
+        function saveDonation() {
+    // Zatvaranje forme za unos donacije
+    bootstrap.Modal.getInstance(document.getElementById('donationModal')).hide();
+    
+    // Prikazivanje modala sa porukom o uspješnoj donaciji
+    new bootstrap.Modal(document.getElementById('successModal')).show();
+}
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
