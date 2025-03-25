@@ -1,0 +1,88 @@
+<!-- Page content -->
+<section class="py-5" id="account">
+    <div class="container px-5">
+        <div class="bg-light rounded-3 py-5 px-4 px-md-5 mb-5">
+            <div class="text-center mb-5">
+                <h1 class="fw-bolder">Dobrodošli!</h1>
+                <p class="text-muted">Prijavite se ili registrujte</p>
+            </div>
+            
+            <ul class="nav nav-tabs" id="authTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">Prijava</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab">Registracija</button>
+                </li>
+            </ul>
+            
+            <div class="tab-content mt-4" id="authTabsContent">
+                <!-- Login Form -->
+                <div class="tab-pane fade show active" id="login" role="tabpanel">
+                    <form>
+                        <div class="form-floating mb-3">
+                            <input class="form-control" type="email" placeholder="Email" required>
+                            <label>Email adresa</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input class="form-control" type="password" placeholder="Lozinka" required>
+                            <label>Lozinka</label>
+                        </div>
+                        <div class="d-grid">
+                            <button class="btn btn-primary btn-lg" type="submit">Prijavi se</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Registration Form -->
+                <div class="tab-pane fade" id="register" role="tabpanel">
+                    <form id="registrationForm">
+                        <div class="form-floating mb-3">
+                            <input class="form-control" type="text" placeholder="Ime" required>
+                            <label>Ime</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input class="form-control" type="text" placeholder="Prezime" required>
+                            <label>Prezime</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input class="form-control" type="tel" placeholder="Broj telefona" required>
+                            <label>Broj telefona</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <select class="form-select" required>
+                                <option value="" disabled selected>Odaberite državu</option>
+                                <option value="BiH">Bosna i Hercegovina</option>
+                                <option value="HR">Hrvatska</option>
+                                <option value="SRB">Srbija</option>
+                                <option value="MNE">Crna Gora</option>
+                            </select>
+                            <label>Mjesto stanovanja</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input class="form-control" type="email" placeholder="Email" required>
+                            <label>Email adresa</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input class="form-control" type="password" placeholder="Lozinka" required>
+                            <label>Lozinka</label>
+                        </div>
+                        <div class="d-grid">
+                            <button class="btn btn-success btn-lg" type="submit">Registruj se</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Toast Notification -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 5">
+    <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">Prijava uspješna!</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
